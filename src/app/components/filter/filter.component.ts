@@ -1,0 +1,186 @@
+import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Filter } from '@models/match.model';
+
+/**
+ * Filter Component
+ * Allows users to filter matches by various criteria
+ */
+@Component({
+  selector: 'app-filter',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  template: `
+    <div class="filter-container">
+      <h3>Filter Pertandingan</h3>
+      
+      <div class="filter-grid">
+        <!-- Stage Filter -->
+        <div class="filter-group">
+          <label for="stage-select">Tahap Pertandingan</label>
+          <select 
+            id="stage-select"
+            [(ngModel)]="filters.stage"
+            (change)="onFilterChange()"
+            class="filter-select"
+          >
+            <option value="">Semua Tahap</option>
+            <option value="Group Stage">Tahap Grup</option>
+            <option value="Round of 16">16 Besar</option>
+            <option value="Quarter-finals">Perempat Final</option>
+            <option value="Semi-finals">Semi Final</option>
+            <option value="Final">Final</option>
+          </select>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="filter-group">
+          <label for="status-select">Status</label>
+          <select 
+            id="status-select"
+            [(ngModel)]="filters.status"
+            (change)="onFilterChange()"
+            class="filter-select"
+          >
+            <option value="">Semua Status</option>
+            <option value="upcoming">Akan Datang</option>
+            <option value="live">Sedang Berlangsung</option>
+            <option value="completed">Selesai</option>
+          </select>
+        </div>
+
+        <!-- Team Filter -->
+        <div class="filter-group">
+          <label for="team-input">Cari Tim</label>
+          <input 
+            id="team-input"
+            type="text"
+            [(ngModel)]="filters.team"
+            (change)="onFilterChange()"
+            placeholder="Nama atau kode tim..."
+            class="filter-input"
+          />
+        </div>
+      </div>
+
+      <!-- Reset Button -->
+      <button (click)="resetFilters()" class="reset-btn">
+        Reset Filter
+      </button>
+    </div>
+  `,
+  styles: [`
+    .filter-container {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    h3 {
+      margin: 0 0 16px 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a202c;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #4a5568;
+      margin-bottom: 8px;
+    }
+
+    .filter-select,
+    .filter-input {
+      padding: 10px 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      background: white;
+      color: #2d3748;
+    }
+
+    .filter-select:focus,
+    .filter-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .filter-select {
+      cursor: pointer;
+    }
+
+    .filter-input::placeholder {
+      color: #a0aec0;
+    }
+
+    .reset-btn {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .reset-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .filter-container {
+        padding: 16px;
+      }
+
+      .filter-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      h3 {
+        font-size: 16px;
+      }
+    }
+  `]
+})
+export class FilterComponent {
+  @Input() currentFilters: Filter = {};
+  @Output() filterChange = new EventEmitter<Filter>();
+
+  filters: Filter = {};
+
+  ngOnInit() {
+    this.filters = { ...this.currentFilters };
+  }
+
+  onFilterChange() {
+    this.filterChange.emit(this.filters);
+  }
+
+  resetFilters() {
+    this.filters = {};
+    this.filterChange.emit(this.filters);
+  }
+}

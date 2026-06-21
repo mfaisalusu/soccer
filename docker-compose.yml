@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - WORLD_CUP_API_KEY=${WORLD_CUP_API_KEY:-your_api_key_here}
+    container_name: world-cup-schedule
+    restart: unless-stopped
