@@ -1,6 +1,9 @@
 {
   "version": 1,
-  "defaultProject": "world-cup-schedule",
+  "cli": {
+    "defaultProject": "world-cup-schedule",
+    "analytics": false
+  },
   "projects": {
     "world-cup-schedule": {
       "root": "",
@@ -27,11 +30,8 @@
                   "maximumWarning": "500kb",
                   "maximumError": "1mb"
                 },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
                 }
+
               ],
               "outputHashing": "all"
             },
@@ -50,10 +50,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "world-cup-schedule:build:production"
+              "buildTarget": "world-cup-schedule:build:production"
             },
             "development": {
-              "browserTarget": "world-cup-schedule:build:development"
+              "buildTarget": "world-cup-schedule:build:development"
             }
           },
           "defaultConfiguration": "development"
