@@ -1,4 +1,6 @@
 {
+  "version": 1,
+  "defaultProject": "world-cup-schedule",
   "projects": {
     "world-cup-schedule": {
       "root": "",
@@ -58,5 +60,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
