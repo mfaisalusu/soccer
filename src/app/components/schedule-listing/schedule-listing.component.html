@@ -1,0 +1,165 @@
+<!-- Loading State -->
+<div class="loading-container" *ngIf="isLoading">
+  <div class="loader">
+    <div class="spinner"></div>
+    <p>Memuat jadwal pertandingan...</p>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="schedule-container" *ngIf="!isLoading">
+  <!-- Header -->
+  <div class="header">
+    <div class="competition-header">
+      <img *ngIf="competitionEmblem" [src]="competitionEmblem" alt="Kompetisi Emblem" class="competition-emblem" />
+      <div>
+        <h1>⚽ Jadwal Piala Dunia</h1>
+        <p class="subtitle">Pantau semua pertandingan piala dunia 2026</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-button" [class.active]="currentTab === 'pertandingan'" (click)="selectTab('pertandingan')">Pertandingan</button>
+    <button class="tab-button" [class.active]="currentTab === 'klasemen'" (click)="selectTab('klasemen')">Klasemen</button>
+    <button class="tab-button" [class.active]="currentTab === 'babakGugur'" (click)="selectTab('babakGugur')">Babak Gugur</button>
+  </div>
+
+  <!-- Matches by Stage -->
+  <div *ngIf="currentTab === 'pertandingan'">
+    <div class="matches-section" *ngIf="groupedMatches | keyvalue as stageGroups">
+      <div class="stage-group" *ngFor="let group of stageGroups">
+        <div class="stage-header">
+          <h2>{{ group.key }}</h2>
+          <span class="match-count">{{ group.value.length }} pertandingan</span>
+        </div>
+
+        <!-- Matches List -->
+        <div class="matches-list">
+          <app-match-card
+            *ngFor="let match of group.value"
+            [match]="match"
+          ></app-match-card>
+
+          <!-- Empty State -->
+          <div class="empty-state" *ngIf="group.value.length === 0">
+            <p>Tidak ada pertandingan ditemukan</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div class="no-results" *ngIf="(groupedMatches | keyvalue).length === 0">
+      <p>Tidak ada pertandingan ditemukan</p>
+    </div>
+  </div>
+
+  <!-- Standings -->
+  <div *ngIf="currentTab === 'klasemen'" class="standings-section">
+    <div *ngIf="standingsGroups.length > 0; else noStandings">
+      <div class="standing-group-card" *ngFor="let group of standingsGroups">
+        <div class="standing-group-header">
+          <div>
+            <p class="standing-group-label">{{ group.group ? group.group : group.stage }}</p>
+            <h3>{{ group.type }}</h3>
+          </div>
+          <span class="standing-group-badge">{{ group.stage }}</span>
+        </div>
+
+        <div class="standings-table-wrapper">
+          <table class="standings-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Tim</th>
+                <th>T</th>
+                <th>M</th>
+                <th>S</th>
+                <th>K</th>
+                <th>GM</th>
+                <th>GK</th>
+                <th>SG</th>
+                <th>P</th>
+                <th class="last-form-header">5 Terakhir</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let entry of group.table">
+                <td>{{ entry.position }}</td>
+                <td>
+                  <div class="standing-team-name">
+                    <img *ngIf="entry.team.crest" [src]="entry.team.crest" [alt]="entry.team.name + ' badge'" class="team-badge" />
+                    <span>{{ entry.team.name }}</span>
+                  </div>
+                </td>
+                <td>{{ entry.playedGames }}</td>
+                <td>{{ entry.won }}</td>
+                <td>{{ entry.draw }}</td>
+                <td>{{ entry.lost }}</td>
+                <td>{{ entry.goalsFor }}</td>
+                <td>{{ entry.goalsAgainst }}</td>
+                <td>{{ entry.goalDifference }}</td>
+                <td class="points">{{ entry.points }}</td>
+                <td>
+                  <div class="form-row">
+                    <span
+                      class="form-dot"
+                      *ngFor="let result of getStandingForm(entry)"
+                      [ngClass]="{
+                        'win': result === 'win',
+                        'draw': result === 'draw',
+                        'loss': result === 'loss',
+                        'empty': result === 'empty'
+                      }"
+                    ></span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noStandings>
+      <div class="no-results">
+        <p>Belum ada klasemen tersedia</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Knockout Stage -->
+  <div *ngIf="currentTab === 'babakGugur'">
+    <div class="matches-section" *ngIf="groupedMatches | keyvalue as stageGroups">
+      <div class="stage-group" *ngFor="let group of stageGroups">
+        <div class="stage-header">
+          <h2>{{ group.key }}</h2>
+          <span class="match-count">{{ group.value.length }} pertandingan</span>
+        </div>
+
+        <div class="matches-list">
+          <app-match-card
+            *ngFor="let match of group.value"
+            [match]="match"
+          ></app-match-card>
+
+          <div class="empty-state" *ngIf="group.value.length === 0">
+            <p>Tidak ada pertandingan babak gugur</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="no-results" *ngIf="(groupedMatches | keyvalue).length === 0">
+      <p>Tidak ada pertandingan babak gugur</p>
+    </div>
+  </div>
+</div>
+
+<!-- Error State -->
+<div class="error-container" *ngIf="error">
+  <p>{{ error }}</p>
+  <button (click)="retry()">Coba Lagi</button>
+</div>

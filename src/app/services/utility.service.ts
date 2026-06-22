@@ -85,14 +85,25 @@ export class UtilityService {
    * Get stage order for sorting
    */
   getStageOrder(stage: string): number {
+    if (!stage) {
+      return 0;
+    }
+
+    const normalized = stage.trim().toLowerCase();
+    const groupMatch = normalized.match(/^group\s+([a-z])$/i);
+    if (groupMatch) {
+      return 10 + (groupMatch[1].toUpperCase().charCodeAt(0) - 65);
+    }
+
     const order: { [key: string]: number } = {
-      'Group Stage': 1,
-      'Round of 16': 2,
-      'Quarter-finals': 3,
-      'Semi-finals': 4,
-      'Third Place Play-off': 5,
-      'Final': 6
+      'group stage': 1,
+      'round of 16': 100,
+      'quarter-finals': 200,
+      'semi-finals': 300,
+      'third place play-off': 400,
+      'final': 500
     };
-    return order[stage] || 0;
+
+    return order[normalized] || 999;
   }
 }

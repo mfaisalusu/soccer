@@ -1,0 +1,58 @@
+<div class="match-card" [ngClass]="'status-' + match.status">
+  <!-- Status Badge -->
+  <div class="status-badge" [ngClass]="utilityService.getStatusColor(match.status)">
+    {{ utilityService.getStatusLabel(match.status) }}
+  </div>
+
+  <!-- Date and Venue -->
+  <div class="match-meta">
+    <p class="date">{{ utilityService.formatDate(match.date, 'dd MMM yyyy') }}</p>
+    <p class="venue">{{ match.venue }}</p>
+    <p class="stage">{{ match.stage }}</p>
+  </div>
+
+  <!-- Teams and Score -->
+  <div class="match-content">
+    <!-- Home Team -->
+    <div class="team home-team">
+      <div class="flag">
+        <img *ngIf="match.homeTeam.crest" [src]="match.homeTeam.crest" [alt]="match.homeTeam.name + ' crest'" class="team-crest" />
+        <span *ngIf="!match.homeTeam.crest">{{ match.homeTeam.flag }}</span>
+      </div>
+      <div class="team-info">
+        <h3 class="team-name">{{ match.homeTeam.name }}</h3>
+        <p class="team-code">{{ match.homeTeam.code }}</p>
+      </div>
+    </div>
+
+    <!-- Score and Time -->
+    <div class="score-section">
+      <div class="score-display">
+        <span class="score-number">{{ match.homeScore ?? '-' }}</span>
+        <span class="score-separator">:</span>
+        <span class="score-number">{{ match.awayScore ?? '-' }}</span>
+      </div>
+      <div class="time-display" *ngIf="match.status !== 'completed'">
+        <span class="match-time">{{ match.time }}</span>
+      </div>
+    </div>
+
+    <!-- Away Team -->
+    <div class="team away-team">
+      <div class="team-info">
+        <h3 class="team-name">{{ match.awayTeam.name }}</h3>
+        <p class="team-code">{{ match.awayTeam.code }}</p>
+      </div>
+      <div class="flag">
+        <img *ngIf="match.awayTeam.crest" [src]="match.awayTeam.crest" [alt]="match.awayTeam.name + ' crest'" class="team-crest" />
+        <span *ngIf="!match.awayTeam.crest">{{ match.awayTeam.flag }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Indicator -->
+  <div class="live-indicator" *ngIf="match.status === 'live'">
+    <span class="pulse"></span>
+    Live
+  </div>
+</div>

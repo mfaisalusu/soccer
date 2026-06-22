@@ -10,6 +10,7 @@ export interface Match {
   time: string;
   venue: string;
   stage: string;
+  group?: string;
   status: 'upcoming' | 'live' | 'completed';
   homeScore?: number;
   awayScore?: number;
@@ -19,7 +20,8 @@ export interface Team {
   id: string;
   name: string;
   code: string;
-  flag: string;
+  flag?: string;
+  crest?: string;
 }
 
 export interface Tournament {

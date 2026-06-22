@@ -4,3 +4,4 @@
  */
 
 export * from './match.model';
+export * from './standings.model';

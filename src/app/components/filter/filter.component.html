@@ -1,0 +1,53 @@
+<div class="filter-container">
+  <h3>Filter Pertandingan</h3>
+  
+  <div class="filter-grid">
+    <!-- Stage Filter -->
+    <div class="filter-group">
+      <label for="stage-select">Tahap Pertandingan</label>
+      <select 
+        id="stage-select"
+        [(ngModel)]="filters.stage"
+        (change)="onFilterChange()"
+        class="filter-select"
+      >
+        <option value="">Semua Tahap</option>
+        <option *ngFor="let stage of stageOptions" [value]="stage">{{ stage }}</option>
+      </select>
+    </div>
+
+    <!-- Status Filter -->
+    <div class="filter-group">
+      <label for="status-select">Status</label>
+      <select 
+        id="status-select"
+        [(ngModel)]="filters.status"
+        (change)="onFilterChange()"
+        class="filter-select"
+      >
+        <option value="">Semua Status</option>
+        <option value="upcoming">Akan Datang</option>
+        <option value="live">Sedang Berlangsung</option>
+        <option value="completed">Selesai</option>
+      </select>
+    </div>
+
+    <!-- Team Filter -->
+    <div class="filter-group">
+      <label for="team-input">Cari Tim</label>
+      <input 
+        id="team-input"
+        type="text"
+        [(ngModel)]="filters.team"
+        (change)="onFilterChange()"
+        placeholder="Nama atau kode tim..."
+        class="filter-input"
+      />
+    </div>
+  </div>
+
+  <!-- Reset Button -->
+  <button (click)="resetFilters()" class="reset-btn">
+    Reset Filter
+  </button>
+</div>
